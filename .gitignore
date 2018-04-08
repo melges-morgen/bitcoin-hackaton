@@ -3,3 +3,4 @@ client/package-lock.json
 client/app.js
 srv/venv
 srv/database.sqlite
+srv/__pycache__
