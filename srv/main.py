@@ -37,6 +37,10 @@ def pay_order(order_id):
     if not check_transaction(tx, order.amount):
         return jsonify(error='Destination or amount are wrong'), 400
 
+    if not model.check_transaction(tx.txid):
+        return jsonify(error='This transaction already used for another order'), 400
+
+    post_transaction_to_bitcoin_network(tx)
     model.add_transaction_to_order(order_id, tx.txid)
 
     return '', 204
@@ -59,6 +63,8 @@ def check_transaction(tx, amont):
             return True
     return False
 
+def post_transaction_to_bitcoin_network(tx):
+    pass
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Float, BLOB
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, BLOB, exists
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -24,6 +24,11 @@ def find_query_by_id(order_id):
         .one()
 
 
+def check_transaction(tx):
+    session = sessionmaker(bind=engine)()
+    return not session.query(exists().where(Order.transaction == tx)).scalar()
+
+
 def add_transaction_to_order(order_id, tx):
     session = sessionmaker(bind=engine)()
     session.query(Order) \
@@ -42,4 +47,3 @@ class Order(Base):
 
 engine = create_engine('sqlite:///database.sqlite', echo=True)
 Base.metadata.create_all(engine)
-
