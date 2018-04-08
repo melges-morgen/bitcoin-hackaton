@@ -24,20 +24,19 @@ def find_query_by_id(order_id):
         .one()
 
 
-
 def add_transaction_to_order(order_id, tx):
     session = sessionmaker(bind=engine)()
-    session.query() \
+    session.query(Order) \
         .filter(Order.id == order_id) \
-        .update({Order.transaction: tx}) \
-        .commit()
+        .update({Order.transaction: tx, Order.state: "PENDING"})
+    session.commit()
 
 
 class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True)
     amount = Column(Integer)
-    transaction = Column(BLOB)
+    transaction = Column(String)
     state = Column(String)
 
 

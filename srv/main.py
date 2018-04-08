@@ -37,7 +37,7 @@ def pay_order(order_id):
     if not check_transaction(tx, order.amount):
         return jsonify(error='Destination or amount are wrong'), 400
 
-    model.add_transaction_to_order(order_id, tx.transaction)
+    model.add_transaction_to_order(order_id, tx.txid)
 
     return '', 204
 
@@ -49,7 +49,7 @@ def get_order(order_id):
         id=order.id,
         amount=order.amount,
         state=order.state,
-        destination=ADDRESS
+        transaction=order.transaction
     )
 
 
