@@ -21,16 +21,19 @@
 <body>
   <main class="wrraper">
     <section class="container pay" id="no_login" style="display:none">
+      <p class="center-info" id="info" style="margin-bottom: 0">Заказ №345879</p>
+      <p class="center-info">Сумма: 0,0045 BTC</p>
       <form autocomplete="on" id="save-form">
         <fieldset>
           <label for="wif">WIF key</label>
           <input id="wif_key" type="text" placeholder="WIF" id="wif">
-          <input class="button-primary" type="submit" value="Save Key Local">
+          <input class="button-primary" type="submit" value="Подписать транзакцию">
         </fieldset>
       </form>
     </section>
     <section class="container" id="login" style="display:none">
-      <p id="info">info</p>
+      <p class="center-info" id="info" style="margin-bottom: 0">Заказ №345879</p>
+      <p class="center-info">Сумма: 0,0045 BTC</p>
       <div class="btn-center">
         <button id="send" class="button button-outline">Оплатить</button>
       </div>
@@ -46,6 +49,7 @@
       $.get(url+'/current-order').done(function(conent) {
         body.destinationAddress = conent.destination;
         body.amount = conent.amount;
+        body.order = conent.id;
       });
     }
 
@@ -60,12 +64,10 @@
 
         // Get Tx
         // Push server tx
-        wallet.formTransaction().then(v => {
-          debugger;
-          console.log(v);
-
-          $.post("localhost:9999/orders/<order_id>/pay", {
-            context: v
+        wallet.formTransaction().then(tx => {
+          var to = "localhost:9999/orders/{order}/pay".replace("{order}", body.order);
+          $.post(to, {
+            tx: tx
           });
         })
       });
