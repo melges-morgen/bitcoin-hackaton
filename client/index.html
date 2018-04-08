@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <!-- <base href=""> -->
   <meta charset="UTF-8">
@@ -9,10 +10,12 @@
 
   <link rel="stylesheet" href="master.css">
 
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
 
   <title>Прототип BTC касcы</title>
 </head>
+
 <body>
   <main class="wrraper">
     <section class="container pay" id="no_login" style="display:none">
@@ -33,22 +36,30 @@
   </main>
   <script src="app.js"></script>
   <script>
-    $(function() {
-      var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
-  var amount = 5000;
-  var wallet = new Wallet({
-    pKey: "cVJYN2BKqEHAKZQNZUocVYJT2Aee5TTTo8Ke7Yu5Qno6jRmEfsUu",
-    destinationAddress,
-    amount
-  });
-  wallet.formTransaction().then(v => {console.log(v)})
+    $(function () {
 
-      $('send').click(function() {
+      var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
+      var amount = 5000;
+      var wallet = new Wallet({
+        pKey: "cVJYN2BKqEHAKZQNZUocVYJT2Aee5TTTo8Ke7Yu5Qno6jRmEfsUu",
+        destinationAddress,
+        amount
+      });
+      wallet.formTransaction().then(v => { console.log(v) })
+
+      $('#send').click(function () {
+
         // Get Tx
         // Push server tx
+
+        var tx = "asdasda"; // HEX Tx
+
+        $.post("index.html", {
+          context: tx
+        });
       });
 
-      $("#save-form").submit(function() {
+      $("#save-form").submit(function () {
         if (login) {
           return false;
         }
@@ -79,4 +90,5 @@
     }
   </script>
 </body>
+
 </html>
