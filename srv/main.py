@@ -4,12 +4,12 @@ from btcpy.setup import setup
 from btcpy.structs.crypto import PublicKey
 from btcpy.structs.transaction import Transaction
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
+from app import app
 import model
 
 ADDRESS = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm"
 
-app = Flask(__name__)
 setup('testnet')
 
 
@@ -65,6 +65,22 @@ def check_transaction(tx, amont):
 
 def post_transaction_to_bitcoin_network(tx):
     pass
+
+@app.route('/invoice/', methods=['POST'])
+def new_invoice():
+    # if not request.json:
+    #     abort(400)
+    pay_info = request.get_json()
+    invoice = model.Invoice.new(**pay_info)
+    return jsonify({
+        "amount_satoshi": invoice.amount_satoshi,
+        "lock_time": invoice.lock_time,
+        "to_addr": invoice.to_addr,
+        "confirmation_type": invoice.confirmation_type,
+        "user_data": invoice.user_data
+    })
+    # return '', 204
+
 
 if __name__ == '__main__':
     app.run(debug=True)
