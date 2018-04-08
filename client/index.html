@@ -39,26 +39,22 @@
   <script src="app.js"></script>
   <script>
     $(function () {
-
-      var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
-      var amount = 5000;
-      var wallet = new Wallet({
-        pKey: "cVJYN2BKqEHAKZQNZUocVYJT2Aee5TTTo8Ke7Yu5Qno6jRmEfsUu",
-        destinationAddress,
-        amount
-      });
-      wallet.formTransaction().then(v => { console.log(v) })
+      var port = '9999';
 
       $('#send').click(function () {
+        if (!login) {
+          return;
+        }
 
         // Get Tx
         // Push server tx
+        wallet.formTransaction().then(v => {
+          console.log(v);
 
-        var tx = "asdasda"; // HEX Tx
-
-        $.post("index.html", {
-          context: tx
-        });
+          $.post("localhost:9999/orders/<order_id>/pay", {
+            context: v
+          });
+        })
       });
 
       $("#save-form").submit(function () {
@@ -69,10 +65,21 @@
         wif = $("#wif_key").val();
 
         // Check private key if () { ... }
+        var wallet = new Wallet({
+          pKey: wif,
+          destinationAddress,
+          amount
+        });
+
         login = true;
         localStorage.setItem("wif", wif);
         $("#login").show();
         $("#no_login").hide();
+
+        $.get('localhost/current-order').done(function(conent) {
+          var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
+          var amount = 5000;
+        });
 
         return false;
       });
@@ -84,6 +91,11 @@
     if (wif) {
       // Login private key
       login = true;
+
+      $.get('localhost/current-order').done(function(conent) {
+        var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
+        var amount = 5000;
+      });
 
       $("#login").show();
     }
