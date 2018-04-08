@@ -1,0 +1,11 @@
+blockchain==1.4.0
+chainside-btcpy==0.3.3
+click==6.7
+ecdsa==0.13
+Flask==0.12.2
+Flask-SQLAlchemy==2.3.2
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
+SQLAlchemy==1.2.6
+Werkzeug==0.14.1
