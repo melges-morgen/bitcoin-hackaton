@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Float, BLOB
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, BLOB, exists
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -17,14 +17,49 @@ def create_order(amount):
     return order
 
 
+def find_query_by_id(order_id):
+    session = sessionmaker(bind=engine)()
+    return session.query(Order) \
+        .filter(Order.id == order_id) \
+        .one()
+
+
+def check_transaction(tx):
+    session = sessionmaker(bind=engine)()
+    return not session.query(exists().where(Order.transaction == tx)).scalar()
+
+
+def add_transaction_to_order(order_id, tx):
+    session = sessionmaker(bind=engine)()
+    session.query(Order) \
+        .filter(Order.id == order_id) \
+        .update({Order.transaction: tx, Order.state: "PENDING"})
+    session.commit()
+
+
+def complete_order(order_id):
+    session = sessionmaker(bind=engine)()
+    session.query(Order) \
+        .filter(Order.id == order_id) \
+        .update({Order.state: "COMPLETED"})
+    session.commit()
+
+
+def complete_order_by_transaction(tx):
+    session = sessionmaker(bind=engine)()
+    session.query(Order) \
+        .filter(Order.transaction == tx) \
+        .update({Order.state: "COMPLETED"})
+    session.commit()
+
+
 class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True)
-    amount = Column(Float)
-    transaction = Column(BLOB)
+    amount = Column(Integer)
+    transaction = Column(String)
     state = Column(String)
 
 
 engine = create_engine('sqlite:///database.sqlite', echo=True)
 Base.metadata.create_all(engine)
-
