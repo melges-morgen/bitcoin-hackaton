@@ -17,10 +17,26 @@ def create_order(amount):
     return order
 
 
+def find_query_by_id(order_id):
+    session = sessionmaker(bind=engine)()
+    return session.query(Order) \
+        .filter(Order.id == order_id) \
+        .one()
+
+
+
+def add_transaction_to_order(order_id, tx):
+    session = sessionmaker(bind=engine)()
+    session.query() \
+        .filter(Order.id == order_id) \
+        .update({Order.transaction: tx}) \
+        .commit()
+
+
 class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True)
-    amount = Column(Float)
+    amount = Column(Integer)
     transaction = Column(BLOB)
     state = Column(String)
 

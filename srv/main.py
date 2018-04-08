@@ -20,7 +20,7 @@ def health_check():
 
 @app.route('/current-order')
 def current_order():
-    order = model.create_order(random.uniform(0.01, 1.1) * 10 ** 8)
+    order = model.create_order(int(random.uniform(0.01, 1.1) * 10 ** 4))
     return jsonify(
         id=order.id,
         amount=order.amount,
@@ -33,16 +33,29 @@ def current_order():
 def pay_order(order_id):
     pay_info = request.get_json()
     tx = Transaction.unhexlify(pay_info['transaction'])
-    if not check_transaction(tx, 2000):
+    order = model.find_query_by_id(order_id)
+    if not check_transaction(tx, order.amount):
         return jsonify(error='Destination or amount are wrong'), 400
-    print(pay_info)
+
+    model.add_transaction_to_order(order_id, tx.transaction)
 
     return '', 204
 
 
+@app.route('/orders/<order_id>')
+def get_order(order_id):
+    order = model.find_query_by_id(order_id)
+    return jsonify(
+        id=order.id,
+        amount=order.amount,
+        state=order.state,
+        destination=ADDRESS
+    )
+
+
 def check_transaction(tx, amont):
     for out in tx.outs:
-        if out.value == amont and out.script_pubkey.to_address() == ADDRESS:
+        if out.value == amont and str(out.script_pubkey.address()) == ADDRESS:
             return True
     return False
 
