@@ -1,3 +1,4 @@
 client/node_modules
 client/package-lock.json
 client/app.js
+srv/venv

@@ -38,8 +38,21 @@
   </main>
   <script src="app.js"></script>
   <script>
+    get_order(url) {
+      if (!login) {
+        return;
+      }
+
+      $.get(url+'/current-order').done(function(conent) {
+        debugger;
+        var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
+        var amount = 5000;
+      });
+
+    }
     $(function () {
-      var port = '9999';
+      var port = ':5000';
+       var url = 'localhost' + port;
 
       $('#send').click(function () {
         if (!login) {
@@ -76,10 +89,7 @@
         $("#login").show();
         $("#no_login").hide();
 
-        $.get('localhost/current-order').done(function(conent) {
-          var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
-          var amount = 5000;
-        });
+        get_order(url);
 
         return false;
       });
@@ -92,10 +102,7 @@
       // Login private key
       login = true;
 
-      $.get('localhost/current-order').done(function(conent) {
-        var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
-        var amount = 5000;
-      });
+      get_order(url);
 
       $("#login").show();
     }
