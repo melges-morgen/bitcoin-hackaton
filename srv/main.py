@@ -1,5 +1,6 @@
 import random
 
+from bit.network import NetworkAPI
 from btcpy.setup import setup
 from btcpy.structs.crypto import PublicKey
 from btcpy.structs.transaction import Transaction
@@ -63,8 +64,10 @@ def check_transaction(tx, amont):
             return True
     return False
 
+
 def post_transaction_to_bitcoin_network(tx):
-    pass
+    NetworkAPI.broadcast_tx(tx.serialize())
+
 
 @app.route('/invoice/', methods=['POST'])
 def new_invoice():
@@ -79,7 +82,6 @@ def new_invoice():
         "confirmation_type": invoice.confirmation_type,
         "user_data": invoice.user_data
     })
-    # return '', 204
 
 
 if __name__ == '__main__':
