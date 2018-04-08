@@ -38,21 +38,20 @@
   </main>
   <script src="app.js"></script>
   <script>
-    get_order(url) {
+    function get_order(url, body) {
       if (!login) {
         return;
       }
 
       $.get(url+'/current-order').done(function(conent) {
-        debugger;
-        var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
-        var amount = 5000;
+        body.destinationAddress = conent.destination;
+        body.amount = conent.amount;
       });
-
     }
+
     $(function () {
       var port = ':5000';
-       var url = 'localhost' + port;
+      var url = 'http://localhost' + port;
 
       $('#send').click(function () {
         if (!login) {
@@ -62,6 +61,7 @@
         // Get Tx
         // Push server tx
         wallet.formTransaction().then(v => {
+          debugger;
           console.log(v);
 
           $.post("localhost:9999/orders/<order_id>/pay", {
@@ -78,37 +78,39 @@
         wif = $("#wif_key").val();
 
         // Check private key if () { ... }
-        var wallet = new Wallet({
-          pKey: wif,
-          destinationAddress,
-          amount
-        });
+        // var wallet = new Wallet({
+        //   pKey: wif,
+        //   destinationAddress,
+        //   amount
+        // });
 
         login = true;
         localStorage.setItem("wif", wif);
         $("#login").show();
         $("#no_login").hide();
+        debugger;
 
-        get_order(url);
+        get_order(url, body);
 
         return false;
       });
+
+      var login = false;
+      var wif = localStorage.getItem("wif");
+      var body = {};
+
+      if (wif) {
+        // Login private key
+        login = true;
+
+        get_order(url, body);
+
+        $("#login").show();
+      }
+      else {
+        $("#no_login").show();
+      }
     });
-
-    var login = false;
-    var wif = localStorage.getItem("wif");
-
-    if (wif) {
-      // Login private key
-      login = true;
-
-      get_order(url);
-
-      $("#login").show();
-    }
-    else {
-      $("#no_login").show();
-    }
   </script>
 </body>
 
