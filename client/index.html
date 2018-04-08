@@ -33,9 +33,15 @@
   </main>
   <script>
     $(function() {
-      $('send').click(function() {
+      $('#send').click(function() {
         // Get Tx
         // Push server tx
+
+        var tx = "asdasda"; // HEX Tx
+
+        $.post("index.html", {
+          context: tx
+        });
       });
 
       $("#save-form").submit(function() {
