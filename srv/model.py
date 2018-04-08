@@ -37,6 +37,14 @@ def add_transaction_to_order(order_id, tx):
     session.commit()
 
 
+def complete_order(order_id):
+    session = sessionmaker(bind=engine)()
+    session.query(Order) \
+        .filter(Order.id == order_id) \
+        .update({Order.state: "COMPLETED"})
+    session.commit()
+
+
 class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True)
