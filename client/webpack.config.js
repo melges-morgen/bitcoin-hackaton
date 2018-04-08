@@ -1,19 +1,18 @@
-const path = require('path');
-
 module.exports = {
-  entry: './src/index.js',
+  entry: ["babel-polyfill", "./src/index.js"],
   output: {
-    filename: './app.js'
+    filename: "./app.js"
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env']
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-transform-async-to-generator"]
           }
         }
       }
