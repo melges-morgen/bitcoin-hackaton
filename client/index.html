@@ -1,21 +1,72 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <!-- <base href=""> -->
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+  <link rel="stylesheet" href="https://cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+  <link rel="stylesheet" href="https://cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
 
-  <title>The HTML5 Herald</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
+  <link rel="stylesheet" href="master.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
-  <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-  <![endif]-->
+  <title>Прототип BTC касcы</title>
 </head>
-
 <body>
-  <script src="app.js"></script>
+  <main class="wrraper">
+    <section class="container pay" id="no_login" style="display:none">
+      <form autocomplete="on" id="save-form">
+        <fieldset>
+          <label for="wif">WIF key</label>
+          <input id="wif_key" type="text" placeholder="WIF" id="wif">
+          <input class="button-primary" type="submit" value="Save Key Local">
+        </fieldset>
+      </form>
+    </section>
+    <section class="container" id="login" style="display:none">
+      <p id="info">info</p>
+      <div class="btn-center">
+        <button id="send" class="button button-outline">Оплатить</button>
+      </div>
+    </section>
+  </main>
+  <script>
+    $(function() {
+      $('send').click(function() {
+        // Get Tx
+        // Push server tx
+      });
+
+      $("#save-form").submit(function() {
+        if (login) {
+          return false;
+        }
+
+        wif = $("#wif_key").val();
+
+        // Check private key if () { ... }
+        login = true;
+        localStorage.setItem("wif", wif);
+        $("#login").show();
+        $("#no_login").hide();
+
+        return false;
+      });
+    });
+
+    var login = false;
+    var wif = localStorage.getItem("wif");
+
+    if (wif) {
+      // Login private key
+      login = true;
+
+      $("#login").show();
+    }
+    else {
+      $("#no_login").show();
+    }
+  </script>
 </body>
 </html>
