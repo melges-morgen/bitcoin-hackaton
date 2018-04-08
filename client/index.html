@@ -31,8 +31,18 @@
       </div>
     </section>
   </main>
+  <script src="app.js"></script>
   <script>
     $(function() {
+      var destinationAddress = "mvmSpLUxCXkMGj3CTAsudaB148YypZodDm";
+  var amount = 5000;
+  var wallet = new Wallet({
+    pKey: "cVJYN2BKqEHAKZQNZUocVYJT2Aee5TTTo8Ke7Yu5Qno6jRmEfsUu",
+    destinationAddress,
+    amount
+  });
+  wallet.formTransaction().then(v => {console.log(v)})
+
       $('send').click(function() {
         // Get Tx
         // Push server tx
